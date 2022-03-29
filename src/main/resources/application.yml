@@ -1,0 +1,13 @@
+server:
+  port: 8090
+  error:
+    include-stacktrace: on_param
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${HOST_DB:localhost:5433}/anime?ApplicationName=api-spring-essential
+    username: ${DB_USER:postgres}
+    password: ${DB_PW:bs#2020}
+  jpa:
+    hibernate:
+      ddl-auto: update
