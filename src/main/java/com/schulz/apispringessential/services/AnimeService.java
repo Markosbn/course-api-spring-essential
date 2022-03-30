@@ -1,6 +1,7 @@
 package com.schulz.apispringessential.services;
 
 import com.schulz.apispringessential.domain.Anime;
+import com.schulz.apispringessential.mappers.AnimeMapper;
 import com.schulz.apispringessential.repositories.AnimeRepository;
 import com.schulz.apispringessential.requests.AnimePostRequestBody;
 import com.schulz.apispringessential.requests.AnimePutRequestBody;
@@ -26,9 +27,12 @@ public class AnimeService {
                         () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
     }
 
+    public List<Anime> findByName(String name){
+        return animeRepository.findByName(name);
+    }
+
     public Anime save(AnimePostRequestBody animePostRequestBody) {
-        Anime anime = Anime.builder().name(animePostRequestBody.getName()).build();
-        return animeRepository.save(anime);
+        return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
     }
 
     public void delete(Long id) {
@@ -37,9 +41,8 @@ public class AnimeService {
 
     public void replace(AnimePutRequestBody animePutRequestBody) {
         findByIdOrThrowBadRequestException(animePutRequestBody.getId());
-        Anime anime = Anime.builder()
-                .id(animePutRequestBody.getId())
-                .name(animePutRequestBody.getName()).build();
+        Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        anime.setId(animePutRequestBody.getId());
         animeRepository.save(anime);
     }
 }
