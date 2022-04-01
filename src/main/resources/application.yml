@@ -5,9 +5,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${HOST_DB:localhost:5433}/anime?ApplicationName=api-spring-essential
+    url: jdbc:postgresql://${HOST_DB:localhost:5432}/anime?ApplicationName=api-spring-essential
     username: ${DB_USER:postgres}
-    password: ${DB_PW:bs#2020}
+    password: ${DB_PW:root}
   jpa:
     hibernate:
       ddl-auto: update

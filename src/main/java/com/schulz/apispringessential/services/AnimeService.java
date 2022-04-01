@@ -1,20 +1,20 @@
 package com.schulz.apispringessential.services;
 
 import com.schulz.apispringessential.domain.Anime;
+import com.schulz.apispringessential.exceptions.BadRequestException;
 import com.schulz.apispringessential.mappers.AnimeMapper;
 import com.schulz.apispringessential.repositories.AnimeRepository;
 import com.schulz.apispringessential.requests.AnimePostRequestBody;
 import com.schulz.apispringessential.requests.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AnimeService {
+
     private final AnimeRepository animeRepository;
 
     public List<Anime> listAll() {
@@ -24,7 +24,7 @@ public class AnimeService {
     public Anime findByIdOrThrowBadRequestException(Long id) {
         return animeRepository.findById(id)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+                        () -> new BadRequestException("Anime not found"));
     }
 
     public List<Anime> findByName(String name){
