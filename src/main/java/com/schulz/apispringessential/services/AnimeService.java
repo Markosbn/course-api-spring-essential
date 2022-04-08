@@ -28,6 +28,9 @@ public class AnimeService {
                 .orElseThrow(
                         () -> new BadRequestException("Anime not found"));
     }
+    public List<Anime> listAllNonPageable() {
+        return animeRepository.findAll();
+    }
 
     public List<Anime> findByName(String name){
         return animeRepository.findByName(name);
@@ -47,4 +50,5 @@ public class AnimeService {
         anime.setId(animePutRequestBody.getId());
         animeRepository.save(anime);
     }
+
 }
