@@ -12,6 +12,8 @@ import javax.validation.constraints.AssertTrue;
 import java.util.List;
 import java.util.Optional;
 
+import static com.schulz.apispringessential.utils.AnimeCreator.createAnimeToBeSaved;
+
 @DataJpaTest
 @DisplayName("Tests for anime repository")
 class AnimeRepositoryTest {
@@ -22,7 +24,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("save creates anime when successful")
     void save_PersistAnime_WhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
 
         Assertions.assertThat(savedAnime)
@@ -38,7 +40,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("save updates anime when successful")
     void save_UpdatesAnime_WhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
 
         savedAnime.setName("DBZ");
@@ -58,7 +60,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("Delete removes anime when successful")
     void delete_RemovesAnime_WhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
 
         this.animeRepository.delete(savedAnime);
@@ -71,7 +73,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("finbyname return list of anime when successful")
     void findByName_ReturnListOfAnime_WhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
 
         String name = savedAnime.getName();
@@ -86,7 +88,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("finbyname return empty list of anime when no anime is found")
     void findByName_EmptyReturnListOfAnime_WhenAnimeIsNotFound(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = createAnimeToBeSaved();
         this.animeRepository.save(animeToBeSaved);
 
         List<Anime> animes = this.animeRepository.findByName("name");
@@ -105,12 +107,6 @@ class AnimeRepositoryTest {
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
                 .isThrownBy(() -> this.animeRepository.save(anime))
                 .withMessageContaining("The anime name cannot be empty");
-    }
-
-    private Anime createAnime(){
-        return Anime.builder()
-                .name("Naruto")
-                .build();
     }
 
 }
