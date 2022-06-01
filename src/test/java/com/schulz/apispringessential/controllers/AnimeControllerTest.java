@@ -2,8 +2,11 @@ package com.schulz.apispringessential.controllers;
 
 import com.schulz.apispringessential.domain.Anime;
 import com.schulz.apispringessential.requests.AnimePostRequestBody;
+import com.schulz.apispringessential.requests.AnimePutRequestBody;
 import com.schulz.apispringessential.services.AnimeService;
 import com.schulz.apispringessential.utils.AnimeCreator;
+import com.schulz.apispringessential.utils.AnimePostRequestBodyCreator;
+import com.schulz.apispringessential.utils.AnimePutRequestBodyCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
@@ -49,7 +54,11 @@ class AnimeControllerTest {
                 .thenReturn(animeList);
 
         BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
-                .thenReturn(animeList);
+                .thenReturn(anime);
+
+        BDDMockito.doNothing().when(animeServiceMock).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+
+        BDDMockito.doNothing().when(animeServiceMock).delete(ArgumentMatchers.anyLong());
     }
 
     @Test
@@ -113,6 +122,36 @@ class AnimeControllerTest {
         Assertions.assertThat(animes)
                 .isNotNull()
                 .isEmpty();
+    }
+
+    @Test
+    void save_ReturnsAnime_WheSuccessful(){
+        Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBodyToBeSaved()).getBody();
+
+        Assertions.assertThat(anime)
+                .isNotNull()
+                .isEqualTo(AnimeCreator.createValidAnime());
+    }
+    @Test
+    void replace_UpdateAnime_WheSuccessful(){
+        Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBodyToBeSaved()))
+                        .doesNotThrowAnyException();
+        ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBodyToBeSaved());
+
+        Assertions.assertThat(entity).isNotNull();
+
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    void delete_UpdateAnime_WheSuccessful(){
+        Assertions.assertThatCode(() -> animeController.delete(1L))
+                        .doesNotThrowAnyException();
+        ResponseEntity<Void> entity = animeController.delete(1L);
+
+        Assertions.assertThat(entity).isNotNull();
+
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
 }

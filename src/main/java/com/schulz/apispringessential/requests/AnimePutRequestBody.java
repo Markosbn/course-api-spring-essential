@@ -1,10 +1,12 @@
 package com.schulz.apispringessential.requests;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
+@Builder
 public class AnimePutRequestBody {
     private Long id;
 
