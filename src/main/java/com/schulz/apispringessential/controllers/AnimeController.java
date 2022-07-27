@@ -40,7 +40,7 @@ public class AnimeController {
     }
 
     @GetMapping("/by-id/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> findByIdAuthenticationPrincipal(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         log.info(userDetails);
         return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
@@ -57,12 +57,12 @@ public class AnimeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody){
         return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         animeService.delete(id);
         return ResponseEntity.noContent().build();

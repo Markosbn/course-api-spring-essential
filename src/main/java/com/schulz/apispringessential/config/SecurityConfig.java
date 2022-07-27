@@ -34,6 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
 //                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and() //Usado para habilitar csrf, onde o sistema gera um token para poder realizar as ações, sem token sem ação
                 .authorizeRequests()
+                .antMatchers("/animes/admin/**").hasRole("ADMIN") //antMatchers valida roles por url
+                .antMatchers("/animes/**").hasRole("USER") //sempre deve vir o mais restritivo antes
                 .anyRequest()
                 .authenticated()
                 .and()
