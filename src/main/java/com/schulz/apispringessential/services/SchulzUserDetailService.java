@@ -13,10 +13,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SchulzUserDetailService implements UserDetailsService {
 
-    private SchulzUserRepository schulzUserRepository;
+    private final SchulzUserRepository schulzUserRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return Optional.ofNullable(schulzUserRepository.findSchulzUserByUsername(username)).orElseThrow(() -> new UsernameNotFoundException("Schulz User not found!"));
+        return Optional.ofNullable(schulzUserRepository.findSchulzUserByUsername(username))
+                .orElseThrow(() -> new UsernameNotFoundException("Schulz User not found!"));
     }
 }

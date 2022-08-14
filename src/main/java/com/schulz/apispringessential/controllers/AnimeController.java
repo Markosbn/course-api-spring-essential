@@ -5,8 +5,13 @@ import com.schulz.apispringessential.requests.AnimePostRequestBody;
 import com.schulz.apispringessential.requests.AnimePutRequestBody;
 import com.schulz.apispringessential.services.AnimeService;
 import com.schulz.apispringessential.utils.DateUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,7 +35,8 @@ public class AnimeController {
     private final AnimeService animeService;
 
     @GetMapping
-    public ResponseEntity<Page<Anime>> list(Pageable pageable) {
+    @Operation(summary = "List all animes paginated", description = "The default size is 20, use the paramenter size to change the default value", tags = {"anime"})
+    public ResponseEntity<Page<Anime>> list(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
 
@@ -63,6 +69,8 @@ public class AnimeController {
     }
 
     @DeleteMapping("/admin/{id}")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Successful Operation"),
+    @ApiResponse(responseCode = "400", description = "When Anime does Not exists")})
     public ResponseEntity<Void> delete(@PathVariable Long id){
         animeService.delete(id);
         return ResponseEntity.noContent().build();
